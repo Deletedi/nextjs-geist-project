@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model UserProfile {
+  id            String   @id @default(cuid())
+  discordId     String   @unique
+  names         NameHistory[]
+  usernames     UsernameHistory[]
+  photos        PhotoHistory[]
+  bios          BioHistory[]
+  connections   ConnectionHistory[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model NameHistory {
+  id          String   @id @default(cuid())
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+  name        String
+  changedAt   DateTime @default(now())
+}
+
+model UsernameHistory {
+  id          String   @id @default(cuid())
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+  username    String
+  changedAt   DateTime @default(now())
+}
+
+model PhotoHistory {
+  id          String   @id @default(cuid())
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+  photoUrl    String
+  changedAt   DateTime @default(now())
+}
+
+model BioHistory {
+  id          String   @id @default(cuid())
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+  bio         String
+  changedAt   DateTime @default(now())
+}
+
+model ConnectionHistory {
+  id          String   @id @default(cuid())
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+  connection  String
+  changedAt   DateTime @default(now())
+}
